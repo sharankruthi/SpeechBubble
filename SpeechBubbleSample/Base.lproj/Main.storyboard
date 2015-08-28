@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="SpeechBubbleSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="steve-jobs" translatesAutoresizingMaskIntoConstraints="NO" id="SwS-Cu-z2O">
+                                <rect key="frame" x="16" y="20" width="568" height="550"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="570" id="0PG-v6-p4O"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="0PG-v6-p4O"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JqK-s9-jkD">
+                                <rect key="frame" x="16" y="570" width="120" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="92j-Fy-iZB"/>
+                                    <constraint firstAttribute="height" constant="30" id="gB1-ip-PNr"/>
+                                </constraints>
+                                <state key="normal" title="Choose Picture">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="choosePicture:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="kSL-NL-5me"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lan-Ha-CSp">
+                                <rect key="frame" x="448" y="570" width="136" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="136" id="LKa-s2-G58"/>
+                                    <constraint firstAttribute="height" constant="30" id="YTp-sT-W2W"/>
+                                </constraints>
+                                <state key="normal" title="Add Speech bubble">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addSpeechBubble:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Zyl-Pt-qZ3"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="JqK-s9-jkD" firstAttribute="top" secondItem="SwS-Cu-z2O" secondAttribute="bottom" id="0p6-iA-yjb"/>
+                            <constraint firstItem="lan-Ha-CSp" firstAttribute="top" secondItem="SwS-Cu-z2O" secondAttribute="bottom" id="2PU-51-0vI"/>
+                            <constraint firstItem="JqK-s9-jkD" firstAttribute="leading" secondItem="SwS-Cu-z2O" secondAttribute="leading" id="AGg-AT-G2k"/>
+                            <constraint firstItem="SwS-Cu-z2O" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="20" id="LAq-qs-1xs"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lan-Ha-CSp" secondAttribute="bottom" id="UmR-hh-NxE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="SwS-Cu-z2O" secondAttribute="trailing" id="Vfy-Of-gCF"/>
+                            <constraint firstItem="SwS-Cu-z2O" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="cWV-E5-QCn"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="JqK-s9-jkD" secondAttribute="bottom" id="jsZ-Vi-Q9w"/>
+                            <constraint firstItem="lan-Ha-CSp" firstAttribute="trailing" secondItem="SwS-Cu-z2O" secondAttribute="trailing" id="lrr-Nu-XhF"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="SwS-Cu-z2O" secondAttribute="bottom" constant="30" id="mSJ-7b-L4a"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="choosePictureButton" destination="JqK-s9-jkD" id="l44-2a-SkD"/>
+                        <outlet property="userImageView" destination="SwS-Cu-z2O" id="2C1-z0-n0b"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="steve-jobs" width="640" height="640"/>
+    </resources>
+</document>
