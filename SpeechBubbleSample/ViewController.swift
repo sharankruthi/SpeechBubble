@@ -8,6 +8,13 @@
 
 import UIKit
 
+enum TailType
+{
+    case SingleType
+    case DoubleType
+}
+
+
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     
@@ -107,11 +114,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.presentViewController(alertActionSheetController,animated: true,completion: nil)
     }
     
-    @IBAction func addSpeechBubble(sender: UIButton)
+    @IBAction func addSingleTailedSpeechBubble(sender: UIButton)
     {
-        speechView.createNewBubble()
+        speechView.createNewBubble(.SingleType)
     }
     
+    @IBAction func addDobleTailedSpeechBubble(sender: UIButton)
+    {
+        speechView.createNewBubble(.DoubleType)
+    }
     
     // MARK:
     // MARK: UIImagePickerControllerDelegate Methods

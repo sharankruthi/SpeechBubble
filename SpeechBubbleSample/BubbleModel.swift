@@ -11,7 +11,9 @@ import UIKit
 
 class BubbleModel :NSObject, NSCopying
 {
-    var tailEndingPoint:CGPoint = CGPointMake(CGFloat(200.0), CGFloat(200.0))
+    var primaryTailEndingPoint:CGPoint = CGPointMake(CGFloat(200.0), CGFloat(200.0))
+    var secondaryTailEndingPoint:CGPoint = CGPointMake(CGFloat(100.0), CGFloat(200.0))
+
     var arcCentrePoint:CGPoint = CGPointMake(CGFloat(50.0), CGFloat(50.0))
     
     var arcPath:CGMutablePathRef = CGPathCreateMutable()
@@ -28,7 +30,8 @@ class BubbleModel :NSObject, NSCopying
     func copyWithZone(zone: NSZone) -> AnyObject {
         let bubbleModelCopy = self.dynamicType()
         
-        bubbleModelCopy.tailEndingPoint = self.tailEndingPoint
+        bubbleModelCopy.primaryTailEndingPoint = self.primaryTailEndingPoint
+        bubbleModelCopy.secondaryTailEndingPoint = self.secondaryTailEndingPoint
         bubbleModelCopy.arcCentrePoint = self.arcCentrePoint
         bubbleModelCopy.arcPath = self.arcPath
         bubbleModelCopy.arcRadius = self.arcRadius

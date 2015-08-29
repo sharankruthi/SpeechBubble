@@ -8,6 +8,13 @@
 
 import UIKit
 
+enum PartToBeMoved
+{
+    case Arc
+    case PrimaryTail
+    case SecondaryTail
+}
+
 
 class SpeechBubbleView: UIView
 {
@@ -20,7 +27,8 @@ class SpeechBubbleView: UIView
     let shadowOffset = CGSizeMake(2.0, 2.0)
     let shadowBlurRadius: CGFloat = 5
     let π = CGFloat(M_PI)
-    var isArcToBeMoved:Bool = true
+    var partToBeMoved:PartToBeMoved?
+    
 
     var currentSpeechBubble:BubbleModel?
     
@@ -49,10 +57,14 @@ class SpeechBubbleView: UIView
         
         var endArcAngle = startArcAngle + ((11 * π) / 6)
         
+        if(!currentSpeechBubbleModel.isBubbleSingleTailed)
+        {
+            endArcAngle = startArcAngle + ((5 * π) / 3)
+        }
+        
         if(endArcAngle > (2 * π))
         {
             endArcAngle -= (2 * π)
-            
         }
         
         CGPathAddArc(speechBubblePath, &scaleTransformationMatrix, currentSpeechBubbleModel.arcCentrePoint.x, currentSpeechBubbleModel.arcCentrePoint.y, currentSpeechBubbleModel.arcRadius, startArcAngle, endArcAngle, false)
@@ -64,8 +76,14 @@ class SpeechBubbleView: UIView
             shadowBlurRadius,
             shadow.CGColor)
         
-        CGPathAddLineToPoint(speechBubblePath, nil, currentSpeechBubbleModel.tailEndingPoint.x, currentSpeechBubbleModel.tailEndingPoint.y)
+        CGPathAddLineToPoint(speechBubblePath, nil, currentSpeechBubbleModel.primaryTailEndingPoint.x, currentSpeechBubbleModel.primaryTailEndingPoint.y)
         
+        if(!currentSpeechBubbleModel.isBubbleSingleTailed)
+        {
+            CGPathAddArc(speechBubblePath, &scaleTransformationMatrix, currentSpeechBubbleModel.arcCentrePoint.x, currentSpeechBubbleModel.arcCentrePoint.y, currentSpeechBubbleModel.arcRadius,startArcAngle + ((5 * π) / 4) , startArcAngle + ((11 * π) / 6), false)
+            
+            CGPathAddLineToPoint(speechBubblePath, nil, currentSpeechBubbleModel.secondaryTailEndingPoint.x, currentSpeechBubbleModel.secondaryTailEndingPoint.y)
+        }
         CGContextAddPath(context, speechBubblePath)
         
         CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
@@ -92,12 +110,17 @@ class SpeechBubbleView: UIView
             {
                 if(CGPathContainsPoint(bubbleModel.arcPath, nil, pointTouched, false))
                 {
-                    isArcToBeMoved = true
+                    partToBeMoved = .Arc
                     currentSpeechBubble = bubbleModel
                 }
-                else if(CGRectContainsPoint(CGRectMake(bubbleModel.tailEndingPoint.x-20, bubbleModel.tailEndingPoint.y-20, 40, 40), pointTouched))
+                else if(CGRectContainsPoint(CGRectMake(bubbleModel.primaryTailEndingPoint.x-20, bubbleModel.primaryTailEndingPoint.y-20, 40, 40), pointTouched))
                 {
-                    isArcToBeMoved = false
+                    partToBeMoved = .PrimaryTail
+                    currentSpeechBubble = bubbleModel
+                }
+                else if(CGRectContainsPoint(CGRectMake(bubbleModel.secondaryTailEndingPoint.x-20, bubbleModel.secondaryTailEndingPoint.y-20, 40, 40), pointTouched))
+                {
+                    partToBeMoved = .SecondaryTail
                     currentSpeechBubble = bubbleModel
                 }
             }
@@ -115,7 +138,7 @@ class SpeechBubbleView: UIView
 
             if(currentSpeechBubble != nil)
             {
-                if(isArcToBeMoved)
+                if(partToBeMoved == .Arc)
                 {
                     let xCoordinate:CGFloat = pointTouched.x/currentSpeechBubble!.scalePoint.x
                     
@@ -125,11 +148,19 @@ class SpeechBubbleView: UIView
                         setNeedsDisplay()
                     }
                 }
-                else
+                else if(partToBeMoved == .PrimaryTail)
                 {
                     if(isxCoordinateInsideFrameForTail(pointTouched.x) && isyCoordinateInsideFrameForTail(pointTouched.y))
                     {
-                        currentSpeechBubble!.tailEndingPoint = pointTouched
+                        currentSpeechBubble!.primaryTailEndingPoint = pointTouched
+                        setNeedsDisplay()
+                    }
+                }
+                else if(partToBeMoved == .SecondaryTail)
+                {
+                    if(isxCoordinateInsideFrameForTail(pointTouched.x) && isyCoordinateInsideFrameForTail(pointTouched.y))
+                    {
+                        currentSpeechBubble!.secondaryTailEndingPoint = pointTouched
                         setNeedsDisplay()
                     }
                 }
@@ -188,30 +219,30 @@ class SpeechBubbleView: UIView
     func getStartAngle(speechBubble:BubbleModel) -> CGFloat
     {
         var startAngle:CGFloat = π / 2
-        if(speechBubble.arcCentrePoint.x == speechBubble.tailEndingPoint.x)
+        if(speechBubble.arcCentrePoint.x == speechBubble.primaryTailEndingPoint.x)
         {
-            if(speechBubble.arcCentrePoint.y < speechBubble.tailEndingPoint.y)
+            if(speechBubble.arcCentrePoint.y < speechBubble.primaryTailEndingPoint.y)
             {
                 startAngle = (23 * π) / 36
             }
-            else if(speechBubble.arcCentrePoint.y > speechBubble.tailEndingPoint.y)
+            else if(speechBubble.arcCentrePoint.y > speechBubble.primaryTailEndingPoint.y)
             {
                 startAngle = (19 * π) / 12
             }
         }
         else
         {
-            if(speechBubble.arcCentrePoint.y > speechBubble.tailEndingPoint.y)
+            if(speechBubble.arcCentrePoint.y > speechBubble.primaryTailEndingPoint.y)
             {
                 startAngle = (5 * π)/3
             }
-            else if(speechBubble.arcCentrePoint.y < speechBubble.tailEndingPoint.y)
+            else if(speechBubble.arcCentrePoint.y < speechBubble.primaryTailEndingPoint.y)
             {
                 startAngle = π / 2
             }
             else // Equal:
             {
-                if(speechBubble.arcCentrePoint.x < speechBubble.tailEndingPoint.x)
+                if(speechBubble.arcCentrePoint.x < speechBubble.primaryTailEndingPoint.x)
                 {
                     startAngle = π / 12
                 }
@@ -227,7 +258,7 @@ class SpeechBubbleView: UIView
     // MARK:
     // MARK: Speech bubble related methods
     
-    func createNewBubble()
+    func createNewBubble(tailType:TailType)
     {
         var speechBubbleModel:BubbleModel = BubbleModel()
         let xCoordinate = (speechBubbleModel.arcCentrePoint.x)/speechBubbleModel.scalePoint.x
@@ -262,6 +293,11 @@ class SpeechBubbleView: UIView
             }
         }
         
+        
+        if(tailType == .DoubleType)
+        {
+            speechBubbleModel.isBubbleSingleTailed = false
+        }
         arcsArray.append(speechBubbleModel)
         
         setNeedsDisplay()
